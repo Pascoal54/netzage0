@@ -1,0 +1,991 @@
+ <!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Netzage — Digital Growth & Innovation</title>
+  <!-- Google Fonts + Remix Icon (apenas para ícones auxiliares, onde não há imagem de marca) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      text-decoration: none;
+    }
+
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #010101;
+      color: #F5F7FC;
+      line-height: 1.5;
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
+
+    /* Custom Cursor (premium feel) */
+    .cursor-dot {
+      width: 6px;
+      height: 6px;
+      background: #FF5F1F;
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 10000;
+      transition: transform 0.08s linear;
+    }
+    .cursor-outline {
+      width: 32px;
+      height: 32px;
+      border: 1.5px solid rgba(255, 95, 31, 0.5);
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transition: all 0.15s ease-out;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0A0A0A;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #FF5F1F;
+      border-radius: 6px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+
+    /* Animated gradient background for hero */
+    .hero-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 20% 30%, rgba(255, 95, 31, 0.12), rgba(0, 0, 0, 0) 70%),
+                  radial-gradient(circle at 85% 70%, rgba(0, 150, 255, 0.08), transparent 60%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Glassmorphism Nav */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 28px 0;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 12;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-img {
+      height: 42px;
+      width: auto;
+      filter: brightness(0) invert(1);
+    }
+
+    .logo-placeholder {
+      font-size: 1.9rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #FFFFFF, #FF9A6C);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 42px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: #E0E4F0;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: 0.2s;
+      letter-spacing: -0.2px;
+    }
+
+    .nav-links a:hover {
+      color: #FF5F1F;
+    }
+
+    /* Buttons */
+    .btn-primary {
+      background: #FF5F1F;
+      color: #010101;
+      padding: 14px 32px;
+      border-radius: 100px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.95rem;
+      text-decoration: none;
+    }
+
+    .btn-primary:hover {
+      background: #FF7A42;
+      transform: scale(1.02);
+      box-shadow: 0 20px 30px -12px rgba(255, 95, 31, 0.35);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1.2px solid rgba(255, 255, 255, 0.25);
+      color: white;
+      padding: 14px 32px;
+      border-radius: 100px;
+      font-weight: 500;
+      transition: 0.25s;
+      text-decoration: none;
+      backdrop-filter: blur(4px);
+    }
+
+    .btn-outline:hover {
+      border-color: #FF5F1F;
+      background: rgba(255, 95, 31, 0.08);
+    }
+
+    /* Hero */
+    .hero {
+      min-height: 95vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 3;
+      max-width: 780px;
+    }
+
+    .hero-badge {
+      background: rgba(255, 95, 31, 0.12);
+      backdrop-filter: blur(8px);
+      padding: 8px 20px;
+      border-radius: 60px;
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      border: 0.5px solid rgba(255, 95, 31, 0.4);
+      margin-bottom: 28px;
+    }
+
+    .hero h1 {
+      font-size: 4.8rem;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 28px;
+    }
+
+    .hero-gradient-text {
+      background: linear-gradient(135deg, #FFFFFF 20%, #FFB28C 80%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      color: #B6C2E5;
+      max-width: 580px;
+      margin-bottom: 40px;
+    }
+
+    /* sections */
+    section {
+      padding: 100px 0;
+      position: relative;
+    }
+
+    h2 {
+      font-size: 3rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
+
+    .section-sub {
+      color: #9AA8C9;
+      font-size: 1.2rem;
+      max-width: 680px;
+      margin-bottom: 64px;
+    }
+
+    /* cards */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 36px;
+    }
+
+    .service-card {
+      background: rgba(15, 18, 28, 0.7);
+      backdrop-filter: blur(2px);
+      border-radius: 32px;
+      padding: 40px 28px;
+      transition: all 0.4s ease;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .service-card:hover {
+      transform: translateY(-12px);
+      border-color: rgba(255, 95, 31, 0.4);
+      background: rgba(20, 24, 36, 0.9);
+      box-shadow: 0 30px 40px -20px rgba(0,0,0,0.6);
+    }
+
+    .service-img {
+      width: 56px;
+      height: 56px;
+      object-fit: contain;
+      margin-bottom: 28px;
+      filter: brightness(0) invert(1);
+    }
+
+    /* Divisions */
+    .divisions-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+    }
+
+    .division-card {
+      flex: 1;
+      background: linear-gradient(135deg, #0C0F17, #06080F);
+      border-radius: 44px;
+      padding: 48px 36px;
+      border: 1px solid rgba(255, 95, 31, 0.2);
+      transition: 0.3s;
+    }
+
+    .division-card:hover {
+      border-color: #FF5F1F;
+      transform: scale(1.01);
+    }
+
+    .division-img {
+      width: 70px;
+      height: 70px;
+      object-fit: contain;
+      margin-bottom: 28px;
+      border-radius: 50%;
+      background-color: #fff;
+    }
+
+    .btn-sm {
+      background: none;
+      border: 1px solid #FF5F1F;
+      color: #FF5F1F;
+      padding: 10px 24px;
+      border-radius: 40px;
+      font-weight: 500;
+      margin-top: 28px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn-sm:hover {
+      background: #FF5F1F;
+      color: #010101;
+    }
+
+    /* Diferenciais */
+    .diffs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 40px;
+    }
+
+    .diff-item {
+      text-align: center;
+      padding: 20px;
+    }
+
+    .diff-icon {
+      font-size: 2.8rem;
+      color: #FF5F1F;
+      margin-bottom: 20px;
+    }
+
+    /* Founder Section */
+    .founder-section {
+      background: radial-gradient(ellipse at 30% 20%, #141A26, #020304);
+      border-radius: 60px;
+      padding: 56px 52px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .founder-img-container {
+      flex: 0.8;
+      min-width: 220px;
+      text-align: center;
+    }
+
+    .founder-photo {
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #2A2F3F;
+      border: 3px solid #FF5F1F;
+      box-shadow: 0 25px 40px -15px rgba(255, 95, 31, 0.3);
+    }
+
+    .skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 24px 0;
+    }
+
+    .skill-tag {
+      background: #1E2638;
+      padding: 6px 18px;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    /* FAQ */
+    .faq-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .faq-item {
+      background: #0B0E16;
+      border-radius: 28px;
+      transition: 0.2s;
+      cursor: pointer;
+      border: 1px solid #1C2332;
+    }
+
+    .faq-question {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 32px;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+      padding: 0 32px;
+      color: #B2C0E0;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 120px;
+      padding-bottom: 24px;
+    }
+
+    /* Contact */
+    .contact-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 60px;
+    }
+    .contact-info {
+      flex: 1;
+    }
+    .contact-info i {
+      margin-right: 14px;
+      color: #FF5F1F;
+    }
+    .social-icons a {
+      color: #FFF;
+      font-size: 1.9rem;
+      margin-right: 20px;
+      transition: 0.2s;
+    }
+    .social-icons a:hover {
+      color: #FF5F1F;
+    }
+    form {
+      flex: 1;
+      background: #0A0D14;
+      padding: 40px;
+      border-radius: 48px;
+      border: 1px solid #1F2638;
+    }
+    input, textarea {
+      width: 100%;
+      background: #131824;
+      border: 1px solid #2A3246;
+      padding: 16px 20px;
+      border-radius: 32px;
+      margin-bottom: 20px;
+      color: white;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* WhatsApp fixed */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      background: #25D366;
+      border-radius: 60px;
+      padding: 12px 20px 12px 16px;
+      z-index: 100;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+      transition: 0.2s;
+    }
+    .whatsapp-float a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: white;
+      font-weight: 600;
+    }
+
+    /* Notificação elegante */
+    .toast-notification {
+      position: fixed;
+      top: 100px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-30px);
+      background: rgba(10, 12, 20, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 95, 31, 0.4);
+      border-radius: 80px;
+      padding: 16px 36px;
+      max-width: 700px;
+      width: max-content;
+      z-index: 10001;
+      box-shadow: 0 20px 35px -12px black;
+      font-weight: 500;
+      color: #F0F3FF;
+      font-size: 1rem;
+      letter-spacing: -0.2px;
+      opacity: 0;
+      transition: all 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.2);
+      pointer-events: none;
+      text-align: center;
+    }
+    .toast-notification.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* fade in */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .fade-up.appear {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 900px) {
+      .container {
+        padding: 0 24px;
+      }
+      .hero h1 {
+        font-size: 3rem;
+      }
+      nav {
+        flex-direction: column;
+        gap: 20px;
+      }
+      .nav-links {
+        gap: 28px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .founder-section {
+        padding: 32px;
+      }
+    }
+
+    footer {
+      border-top: 1px solid #141A24;
+      padding: 40px 0;
+      text-align: center;
+      color: #6F7C9B;
+    }
+
+    .swal-btn-custom {
+  border-radius: 100px !important;
+  padding: 10px 28px !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+}
+
+.swal-btn-custom:hover {
+  transform: scale(1.02) !important;
+  opacity: 0.95 !important;
+}
+
+.swal-btn-custom, .swal-btn-cancel {
+  border-radius: 100px !important;
+  padding: 10px 24px !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease !important;
+}
+
+.swal-btn-custom:hover {
+  transform: scale(1.02) !important;
+  opacity: 0.95 !important;
+}
+
+.swal-btn-cancel:hover {
+  background: #4A5068 !important;
+}
+
+/* Botão responsivo para mobile */
+@media (max-width: 768px) {
+  .btn-primary {
+    padding: 12px 20px !important;
+    font-size: 0.85rem !important;
+    width: auto !important;
+    min-width: 180px;
+  }
+  
+  form .btn-primary {
+    width: 100% !important;
+    min-width: unset;
+  }
+  #letra{
+  display: none;
+}
+
+ 
+
+}
+.logo span{
+text-transform: uppercase;
+font-weight: bold;
+font-size: 1.4rem;
+ 
+}
+  </style>
+</head>
+<body>
+
+<!-- Custom cursor elements -->
+<div class="cursor-dot"></div>
+<div class="cursor-outline"></div>
+
+<!-- Elegant Notification Toast -->
+<div id="welcomeToast" class="toast-notification">
+  ✦ O seu sucesso começa no momento em que você entende que o digital não é o futuro — é o presente que define quem cresce e quem fica para trás.
+</div>
+
+<!-- WhatsApp Fixed Button -->
+<div class="whatsapp-float">
+  <a href="https://wa.me/244955058009?text=Olá!%20Quero%20levar%20meu%20negócio%20ao%20próximo%20nível" target="_blank">
+    <i class="ri-whatsapp-line" style="font-size: 1.6rem;"></i> <span id="letra">Falar com especialista</span>
+  </a>
+</div>
+
+<header class="hero">
+  <div class="hero-bg"></div>
+  <div class="container">
+    <nav>
+      <div class="logo">
+        <!-- Ícone com imagem real da marca -->
+        <img src="assets/netzageacademic.jpg" alt="Netzage Logo" class="logo-img" style="height: 44px; width: auto; filter: brightness(1);">
+        <span>netzage</span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="#sobre">Sobre</a></li>
+        <li><a href="#servicos">Capabilities</a></li>
+        <li><a href="#divisoes">Ecosystem</a></li>
+        <li><a href="#fundador">Leadership</a></li>
+        <li><a href="#contato">Connect</a></li>
+      </ul>
+    </nav>
+    <div class="hero-content">
+      <div class="hero-badge">✦ INNOVATION & GROWTH</div>
+      <h1>Escalamos negócios<br> com <span class="hero-gradient-text">precisão digital</span></h1>
+      <p>Marketing, tecnologia e inteligência de dados para empresas que querem dominar seu mercado. Resultados que geram vantagem real.</p>
+      <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+        <a href="https://wa.me/244955058009" class="btn-primary" target="_blank"><i class="ri-whatsapp-line"></i> Iniciar conversa</a>
+        <a href="#servicos" class="btn-outline">Explorar serviços <i class="ri-arrow-right-line"></i></a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+   <section id="sobre">
+  <div class="container fade-up">
+    <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+      <h2 style="font-size: 2.8rem;">Where digital meets <br>performance</h2>
+      <div style="font-size: 1.1rem; color: #B0BBD9; margin-top: 20px; margin-bottom: 60px; line-height: 1.6;">
+        Netzage é uma holding que constrói pontes entre estratégia e execução. Somos parceiros de crescimento, não apenas prestadores.
+      </div>
+    </div>
+    
+    <div style="display: flex; gap: 40px; flex-wrap: wrap; justify-content: center; max-width: 1000px; margin: 0 auto;">
+      <div style="flex: 1; min-width: 200px; text-align: center; padding: 24px 16px; background: rgba(255, 95, 31, 0.03); border-radius: 24px;">
+        <div style="width: 48px; height: 48px; background: rgba(255, 95, 31, 0.1); border-radius: 60px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto;">
+          <i class="ri-rocket-line" style="font-size: 1.6rem; color: #FF5F1F;"></i>
+        </div>
+        <h3 style="color: #FFFFFF; font-size: 1.3rem; margin-bottom: 12px;">Missão</h3>
+        <p style="color: #9AA8C9; line-height: 1.5;">Acelerar resultados com soluções baseadas em dados e tecnologia de ponta.</p>
+      </div>
+      
+      <div style="flex: 1; min-width: 200px; text-align: center; padding: 24px 16px; background: rgba(255, 95, 31, 0.03); border-radius: 24px;">
+        <div style="width: 48px; height: 48px; background: rgba(255, 95, 31, 0.1); border-radius: 60px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto;">
+          <i class="ri-eye-line" style="font-size: 1.6rem; color: #FF5F1F;"></i>
+        </div>
+        <h3 style="color: #FFFFFF; font-size: 1.3rem; margin-bottom: 12px;">Visão</h3>
+        <p style="color: #9AA8C9; line-height: 1.5;">Referência em ecossistema digital para empresas de alto desempenho.</p>
+      </div>
+      
+      <div style="flex: 1; min-width: 200px; text-align: center; padding: 24px 16px; background: rgba(255, 95, 31, 0.03); border-radius: 24px;">
+        <div style="width: 48px; height: 48px; background: rgba(255, 95, 31, 0.1); border-radius: 60px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto;">
+          <i class="ri-heart-line" style="font-size: 1.6rem; color: #FF5F1F;"></i>
+        </div>
+        <h3 style="color: #FFFFFF; font-size: 1.3rem; margin-bottom: 12px;">Valor</h3>
+        <p style="color: #9AA8C9; line-height: 1.5;">Transparência, inovação e obsessão por resultado.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <section id="servicos">
+  <div class="container fade-up">
+    <h2>Core services</h2>
+    <div class="section-sub">Soluções sob medida para negócios que buscam escala.</div>
+    <div class="services-grid">
+      <div class="service-card">
+        <i class="ri-bar-chart-2-line" style="font-size: 56px; color: #FF5F1F; margin-bottom: 28px; display: block;"></i>
+        <h3>Gestão de Tráfego Pago</h3>
+        <p>ROI previsível com campanhas hyper-targeted em Google, Meta e TikTok.</p>
+      </div>
+      <div class="service-card">
+        <i class="ri-window-line" style="font-size: 56px; color: #FF5F1F; margin-bottom: 28px; display: block;"></i>
+        <h3>High-end Web Development</h3>
+        <p>Experiências digitais que convertem visitantes em clientes.</p>
+      </div>
+      <div class="service-card">
+        <i class="ri-line-chart-line" style="font-size: 56px; color: #FF5F1F; margin-bottom: 28px; display: block;"></i>
+        <h3>Growth Marketing</h3>
+        <p>Estratégias omnichannel, SEO e automação para escalar exponencialmente.</p>
+      </div>
+      <div class="service-card">
+        <i class="ri-database-2-line" style="font-size: 56px; color: #FF5F1F; margin-bottom: 28px; display: block;"></i>
+        <h3>Data & Analytics</h3>
+        <p>Consultoria orientada a dados, funis e inteligência competitiva.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <section id="divisoes">
+  <div class="container fade-up">
+    <h2>Netzage Ecosystem</h2>
+    <div class="section-sub">Duas frentes que completam o ecossistema de sucesso digital.</div>
+    <div class="divisions-row">
+      <div class="division-card">
+        <img src="assets/netzageacademic.jpg" alt="Academica" class="division-img">
+        <h3>Netzage Acadêmica</h3>
+        <p>Capacitação de empreendedores iniciantes com cursos, mentoria e comunidade para sair do zero no digital.</p>
+        <button class="btn-sm" onclick="showAcademicAlert()">Explorar <i class="ri-arrow-right-line"></i></button>
+      </div>
+      <div class="division-card">
+        <img src="assets/netzageexpress.png" alt="Express" class="division-img">
+        <h3>Netzage Express</h3>
+        <p>E-commerce de produtos físicos + logística Cash on Delivery. Solução completa para vendas reais.</p>
+        <button class="btn-sm" onclick="showExpressAlert()">Conhecer <i class="ri-arrow-right-line"></i></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <section>
+    <div class="container fade-up">
+      <h2>Why choose us</h2>
+      <div class="diffs-grid">
+        <div class="diff-item"><i class="ri-line-chart-line diff-icon"></i><h4>Resultados mensuráveis</h4><p>Relatórios claros e dados que guiam cada decisão.</p></div>
+        <div class="diff-item"><i class="ri-flashlight-line diff-icon"></i><h4>Estratégias modernas</h4><p>IA, automação e criatividade para vantagem competitiva.</p></div>
+        <div class="diff-item"><i class="ri-code-box-line diff-icon"></i><h4>Expertise técnica</h4><p>Time multidisciplinar com domínio em dados e programação.</p></div>
+        <div class="diff-item"><i class="ri-customer-service-2-line diff-icon"></i><h4>Suporte dedicado</h4><p>Account manager e suporte estratégico contínuo.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="fundador">
+    <div class="container fade-up">
+      <h2>Visionary leadership</h2>
+      <div class="founder-section">
+        <div class="founder-img-container">
+          <!-- Foto do CEO: substitua src pela imagem real -->
+          <img src="assets/pascoalzage.png" alt="Pascoal António Zage" class="founder-photo" id="ceoPhoto">
+        </div>
+        <div class="founder-info">
+          <h3>Pascoal António Zage</h3>
+          <div style="color: #FF8A5C; font-weight: 500; margin-bottom: 16px;">CEO & Founder — Netzage</div>
+          <p>Técnico de informática, programador full-stack, analista de dados e gestor de tráfego. Combinando tecnologia e marketing para construir soluções de alto impacto. Lidera a Netzage com a missão de transformar negócios através da inteligência digital.</p>
+          <div class="skills">
+            <span class="skill-tag">Computer Technician</span>
+            <span class="skill-tag">Programmer</span>
+            <span class="skill-tag">Data Analyst</span>
+            <span class="skill-tag">Traffic Manager</span>
+          </div>
+          <div style="margin-top: 28px;"><i class="ri-double-quotes-L"></i> Acredito que negócios vencedores nascem da união entre dados, estratégia e visão de futuro.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container fade-up">
+      <h2>Intelligence in motion</h2>
+      <div class="faq-grid" id="faqContainer">
+        <div class="faq-item"><div class="faq-question">Como funciona o processo de Growth? <i class="ri-add-line"></i></div><div class="faq-answer">Imersão, diagnóstico, plano de ação, execução e monitoramento contínuo. Resultados semanais.</div></div>
+        <div class="faq-item"><div class="faq-question">Investimento: é acessível para médias empresas? <i class="ri-add-line"></i></div><div class="faq-answer">Criamos modelos personalizados para cada estágio. Desde consultoria até gestão completa.</div></div>
+        <div class="faq-item"><div class="faq-question">Como a Netzage Acadêmica vai funcionar? <i class="ri-add-line"></i></div><div class="faq-answer">Trilhas práticas, comunidade e mentorias ao vivo. Lançamento Q3 2025.</div></div>
+        <div class="faq-item"><div class="faq-question">Posso contratar apenas Netzage Express? <i class="ri-add-line"></i></div><div class="faq-answer">Sim, cada divisão opera com autonomia. Entre em contato para detalhes.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contato">
+    <div class="container fade-up">
+      <h2>Ready to scale?</h2>
+      <div class="contact-wrapper">
+        <div class="contact-info">
+          <p><i class="ri-whatsapp-line"></i> +244 955 058 009</p>
+          <p><i class="ri-mail-line"></i>netzage@gmail.com</p>
+          <p><i class="ri-map-pin-line"></i> Luanda / Remote Global</p>
+          <div class="social-icons">
+            <a href="#"><i class="ri-instagram-line"></i></a>
+            <a href="#"><i class="ri-linkedin-box-line"></i></a>
+            <a href="#"><i class="ri-twitter-x-line"></i></a>
+          </div>
+        </div>
+        <form id="premiumContact">
+          <input type="text" placeholder="Nome completo" required>
+          <input type="email" placeholder="E-mail corporativo" required>
+          <textarea rows="3" placeholder="Conte sobre seu desafio ou objetivo..."></textarea>
+          <button type="submit" class="btn-primary" style="width:100%; justify-content:center; padding: 14px 24px; font-size: 0.95rem;" id="submitBtn">Solicitar proposta <i class="ri-send-plane-line"></i></button>
+        </form>
+      </div>
+    </div>
+  </section>
+  <footer>
+    <div class="container">© 2026 Netzage — Where innovation builds legacy. Todos os direitos reservados.</div>
+  </footer>
+</main>
+
+ <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+ <script>
+  // Custom Cursor
+  const cursorDot = document.querySelector('.cursor-dot');
+  const cursorOutline = document.querySelector('.cursor-outline');
+  window.addEventListener('mousemove', (e) => {
+    cursorDot.style.transform = `translate(${e.clientX - 3}px, ${e.clientY - 3}px)`;
+    cursorOutline.style.transform = `translate(${e.clientX - 16}px, ${e.clientY - 16}px)`;
+  });
+
+  // Elegant Notification on load (SweetAlert2)
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      Swal.fire({
+        text: "O seu sucesso começa no momento em que você entende que o digital não é o futuro — é o presente que define quem cresce e quem fica para trás.",
+        icon: "info",
+        confirmButtonText: "Entendi",
+        confirmButtonColor: "#FF5F1F",
+        background: "#0A0D14",
+        color: "#F5F7FC",
+        iconColor: "#FF5F1F",
+        backdrop: "rgba(0,0,0,0.85)",
+        timer: 10000,
+        showConfirmButton: true,
+        position: "top",
+        toast: false,
+        customClass: {
+          popup: 'swal-premium',
+          confirmButton: 'swal-btn-custom'
+        },
+        didOpen: () => {
+          const popup = document.querySelector('.swal-premium');
+          if (popup) {
+            popup.style.borderRadius = '24px';
+            popup.style.border = '1px solid rgba(255, 95, 31, 0.3)';
+            popup.style.fontFamily = 'Inter, sans-serif';
+            popup.style.fontSize = '0.95rem';
+          }
+        }
+      });
+    }, 500);
+  });
+
+  // Smooth Scroll + fade-up intersection
+  const faders = document.querySelectorAll('.fade-up');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('appear');
+      }
+    });
+  }, { threshold: 0.15 });
+  faders.forEach(el => observer.observe(el));
+
+  // FAQ toggles
+  const faqItems = document.querySelectorAll('.faq-item');
+  faqItems.forEach(item => {
+    const questionDiv = item.querySelector('.faq-question');
+    questionDiv.addEventListener('click', () => {
+      const isActive = item.classList.contains('active');
+      faqItems.forEach(f => f.classList.remove('active'));
+      if (!isActive) item.classList.add('active');
+    });
+  });
+  if (faqItems.length) faqItems[0].classList.add('active');
+
+  // Form submit com SweetAlert2
+  const contactForm = document.getElementById('premiumContact');
+  if (contactForm) {
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      Swal.fire({
+        title: "Solicitação enviada!",
+        text: "Nossa equipe de growth responderá em até 24h.",
+        icon: "success",
+        confirmButtonText: "Ok",
+        confirmButtonColor: "#FF5F1F",
+        background: "#0A0D14",
+        color: "#F5F7FC",
+        iconColor: "#FF5F1F",
+        timer: 3000,
+        showConfirmButton: true,
+        customClass: {
+          popup: 'swal-premium'
+        }
+      });
+      contactForm.reset();
+    });
+  }
+
+  // anchor smooth
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      const targetId = this.getAttribute('href');
+      if (targetId === "#" || targetId === "") return;
+      const targetElem = document.querySelector(targetId);
+      if (targetElem) {
+        e.preventDefault();
+        targetElem.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
+</script>
+<script>
+    // SweetAlert2 functions for divisions
+function showAcademicAlert() {
+  Swal.fire({
+    title: "Netzage Acadêmica",
+    text: "Em breve: jornada prática para iniciantes com cursos, mentoria e comunidade exclusiva.",
+    icon: "info",
+    confirmButtonText: "Quero saber quando lançar",
+    confirmButtonColor: "#FF5F1F",
+    showCancelButton: true,
+    cancelButtonText: "Fechar",
+    cancelButtonColor: "#3A3F55",
+    background: "#0A0D14",
+    color: "#F5F7FC",
+    iconColor: "#FF5F1F",
+    customClass: {
+      popup: 'swal-premium',
+      confirmButton: 'swal-btn-custom',
+      cancelButton: 'swal-btn-cancel'
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire({
+        title: "Obrigado!",
+        text: "Entraremos em contato assim que a Netzage Acadêmica for lançada.",
+        icon: "success",
+        confirmButtonColor: "#FF5F1F",
+        background: "#0A0D14",
+        color: "#F5F7FC",
+        timer: 2500,
+        showConfirmButton: true
+      });
+    }
+  });
+}
+
+function showExpressAlert() {
+  Swal.fire({
+    title: "Netzage Express",
+    text: "Plataforma de e-commerce + Cash on Delivery em desenvolvimento. Em breve revolucionaremos as entregas.",
+    icon: "info",
+    confirmButtonText: "Receber novidades",
+    confirmButtonColor: "#FF5F1F",
+    showCancelButton: true,
+    cancelButtonText: "Fechar",
+    cancelButtonColor: "#3A3F55",
+    background: "#0A0D14",
+    color: "#F5F7FC",
+    iconColor: "#FF5F1F",
+    customClass: {
+      popup: 'swal-premium',
+      confirmButton: 'swal-btn-custom',
+      cancelButton: 'swal-btn-cancel'
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire({
+        title: "Anotado!",
+        text: "Enviaremos informações exclusivas sobre o lançamento da Netzage Express.",
+        icon: "success",
+        confirmButtonColor: "#FF5F1F",
+        background: "#0A0D14",
+        color: "#F5F7FC",
+        timer: 2500,
+        showConfirmButton: true
+      });
+    }
+  });
+}
+</script>
+</body>
+</html>
